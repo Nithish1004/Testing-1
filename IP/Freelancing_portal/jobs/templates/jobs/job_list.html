@@ -1,0 +1,33 @@
+{% extends "jobs/_base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold text-gray-800 mb-6">Available Jobs</h2>
+
+<div class="grid gap-6">
+    {% for job in jobs %}
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-blue-600">{{ job.title }}</h3>
+        <p class="text-gray-700 mt-2">{{ job.description }}</p>
+        <p class="text-gray-600 mt-2">Budget: ₹{{ job.budget }}</p>
+        <p class="text-gray-600 mt-2">
+            Posted by: {{ job.business.owner.username }}
+        </p>
+
+        {% if user.is_authenticated and user.freelancer %}
+        <div class="mt-4">
+            {% if job.id in applied_jobs %}
+                <button disabled class="bg-gray-400 text-white px-4 py-2 rounded-lg mt-4">Already Applied</button>
+            {% else %}
+                <a href="{% url 'apply-job' job.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-700">
+                    Apply
+                </a>
+            {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p class="text-gray-500">No jobs available right now.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+

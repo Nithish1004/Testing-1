@@ -1,0 +1,14 @@
+{% extends "jobs/_base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Applicants for: {{ job.title }}</h2>
+
+<div class="space-y-4">
+    {% for app in applicants %}
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <p class="font-semibold">{{ app.freelancer.name }}</p>
+        </div>
+    {% empty %}
+        <p class="text-gray-500">No applicants yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

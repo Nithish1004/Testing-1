@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Top Navbar -->
+    <div class="flex flex-col p-5 md:items-center md:justify-between md:flex-row md:px-6 lg:px-8 border-b bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+        <div class="flex flex-row items-center justify-between lg:justify-start">
+            <a href="{% url 'freelancer-list' %}" class="text-3xl font-bold tracking-tighter text-blue-600 transition duration-500 ease-in-out transform tracking-relaxed lg:pr-8">
+                Freelancers
+            </a>
+        </div>
+
+        <nav class="flex-col items-center flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row lg:pl-2">
+            <div class="inline-flex items-center gap-2 list-none lg:ml-auto">
+                {% if user.is_authenticated %}
+                <p>{{ user.email }}</p>
+                {% if user.freelancer.profile_pic %}
+                    <img class="w-10 border rounded-full mr-4" src="{{ user.freelancer.profile_pic.url }}" alt="Profile pic">
+                {% endif %}
+                {% if user.business.profile_pic %}
+                    <img class="w-10 border rounded-full mr-4" src="{{ user.business.profile_pic.url }}" alt="Profile pic">
+                {% endif %}
+                <form action="{% url 'account_logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="items-center block px-10 py-2.5 text-base font-medium text-center text-blue-600 transition duration-500 ease-in-out transform border-2 border-white shadow-md rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Logout
+                    </button>
+                </form>
+                {% else %}
+                <a href="{% url 'account_login' %}">
+                    <button class="items-center block px-10 py-2.5 text-base font-medium text-center text-blue-600 transition duration-500 ease-in-out transform border-2 border-white shadow-md rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Sign in
+                    </button>
+                </a>
+                <a href="{% url 'account_signup' %}">
+                    <button class="items-center block px-10 py-3 text-base font-medium text-center text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Sign up
+                    </button>
+                </a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex pt-20"> <!-- Added padding-top to make space for fixed navbar -->
+        
+        <!-- Fixed Left Sidebar -->
+        <aside class="fixed top-20 left-0 w-64 bg-white shadow-md h-[calc(100vh-5rem)] p-6 z-5">
+            <nav class="flex flex-col gap-6 text-gray-700">
+
+                <a href="{% url 'profile' %}" class="flex items-center gap-3 hover:text-blue-600 font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h12a1 1 0 011 1v10a1 1 0 01-.121.804L12 21l-6.879-3.196z"/>
+                    </svg>
+                    Profile
+                </a>
+
+                <a href="{% url 'job-list' %}" class="flex items-center gap-3 hover:text-blue-600 font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2h6v2a2 2 0 01-2 2H11a2 2 0 01-2-2zM5 10h14l-1 9H6l-1-9z"/>
+                    </svg>
+                    Find My Job
+                </a>
+
+                {% if user.business %}
+                    <a href="{% url 'post-jobs' %}" class="flex items-center gap-3 hover:text-blue-600 font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Post a Job
+                    </a>
+                {% endif %}
+
+                {% if user.business %}
+                    <a href="{% url 'my-job-applicants' %}" class="flex items-center gap-3 hover:text-blue-600 font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        View Applicants
+                    </a>
+                {% endif %}
+
+                {% if user.freelancer %}
+                    <a href="{% url 'my-applied-jobs' %}" class="flex items-center gap-3 hover:text-blue-600 font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Applied Jobs
+                    </a>
+                {% endif %}
+
+            </nav>
+        </aside>
+
+        <!-- Page Content -->
+        <div class="flex-1 ml-64 p-8">
+            <div class="container">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
