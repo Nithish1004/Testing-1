@@ -1,0 +1,20 @@
+{% extends "jobs/_base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Job Updates</h2>
+
+{% for convo in conversations %}
+<div class="p-4 border rounded mb-3">
+    <a href="{% url 'chat' convo.id %}" class="no-underline">
+        <strong>Job:</strong> {{ convo.job.title }} <br>
+        {% if request.user == convo.freelancer %}
+            <strong>Business:</strong> {{ convo.business.username }}
+        {% else %}
+            <strong>Freelancer:</strong> {{ convo.freelancer.username }}
+        {% endif %}
+        <div class="text-sm text-gray-500">Last updated: {{ convo.updated_at }}</div>
+    </a>
+</div>
+{% empty %}
+<p>No active conversations.</p>
+{% endfor %}
+{% endblock %}

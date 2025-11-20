@@ -1,0 +1,44 @@
+{% extends "jobs/_base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Manage Applicants: {{ job.title }}</h2>
+
+<div class="space-y-4">
+    {% for app in applications %}
+        <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+
+                <!-- CLICKABLE FREELANCER NAME -->
+                <p class="font-semibold">
+                    <a href="{% url 'freelancer-detail' app.freelancer.id %}"
+                       class="text-blue-600 hover:underline">
+                        {{ app.freelancer.name }}
+                    </a>
+                </p>
+
+                <p class="text-gray-500">
+                    Status: <span class="font-medium">{{ app.status|capfirst }}</span>
+                </p>
+            </div>
+
+            {% if app.status == 'applied' %}
+            <form method="POST" class="flex gap-2">
+                {% csrf_token %}
+                <input type="hidden" name="app_id" value="{{ app.id }}">
+                
+                <button type="submit" name="action" value="accept"
+                        class="bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700">
+                    Accept
+                </button>
+
+                <button type="submit" name="action" value="reject"
+                        class="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700">
+                    Reject
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="text-gray-500">No applicants yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

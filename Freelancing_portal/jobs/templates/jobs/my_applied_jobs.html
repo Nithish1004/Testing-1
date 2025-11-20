@@ -1,0 +1,28 @@
+{% extends "jobs/_base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">My Applied Jobs</h2>
+
+<div class="space-y-4">
+    {% for app in applications %}
+        <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+                <h3 class="text-xl font-semibold text-blue-600">{{ app.job.title }}</h3>
+                <p class="text-gray-700 mt-1">{{ app.job.description|truncatewords:20 }}</p>
+                <p class="text-gray-600 mt-1">Budget: ₹{{ app.job.budget }}</p>
+            </div>
+            <div>
+                {% if app.status == 'applied' %}
+                    <span class="px-3 py-1 rounded-lg bg-yellow-400 text-white font-medium">Pending</span>
+                {% elif app.status == 'accepted' %}
+                    <span class="px-3 py-1 rounded-lg bg-green-600 text-white font-medium">Accepted</span>
+                {% elif app.status == 'rejected' %}
+                    <span class="px-3 py-1 rounded-lg bg-red-600 text-white font-medium">Rejected</span>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-gray-500">You have not applied to any jobs yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
